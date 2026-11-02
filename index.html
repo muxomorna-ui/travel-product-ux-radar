@@ -238,7 +238,7 @@ const markets={rf:'РФ',international:'Международные',asia:'Ази
 const brandMarkets=n=>D.brand_markets[n]||[];
 function visibleServiceNames(names=sectionServiceNames()){const s=current();return names.filter(n=>!s.markets.size||brandMarkets(n).some(m=>s.markets.has(m)))}
 function brandCategory(n){const base=D.brand_categories.brands[n];return ['air','rail'].includes(active)&&['housing','tickets'].includes(base)?'tickets':base}
-function categoryLabels(){const labels={...D.brand_categories.labels,...(['air','rail'].includes(active)?{tickets:'Продажи билетов'}:{})};if(active==='tours')for(const category of ['housing','tickets','hotels'])delete labels[category];return labels}
+function categoryLabels(){const labels={...D.brand_categories.labels,...(['air','rail'].includes(active)?{tickets:'Продажи билетов'}:{})};if(active==='air')delete labels.tours;if(active==='tours')for(const category of ['housing','tickets','hotels'])delete labels[category];return labels}
 function categoryMembers(cat){return sorted(visibleServiceNames().filter(n=>brandCategory(n)===cat))}
 function topEntries(){if(active==='research')return [];const s=current(),names=sectionServiceNames();return D.top_competitors.entries.filter(e=>names.includes(e.brand)&&(!['housing','air','rail','tours'].includes(active)||e.directions.includes(active))&&(!s.markets.size||s.markets.has(e.market))&&(!s.categories.size||s.categories.has(brandCategory(e.brand))))}
 function topNames(){return list(topEntries().map(e=>e.brand))}
