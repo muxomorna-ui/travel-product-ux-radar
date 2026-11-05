@@ -38,6 +38,12 @@ class ReleaseGateTests(unittest.TestCase):
         self.assertTrue(result['producer_browser_launch_failed'])
         self.assertIn("if(['air','rail'].includes(active))delete labels.tours;", (self.out / 'index.html').read_text())
 
+    def test_alternative_browser_check_name_requires_browser(self):
+        self.write('validation.json', {'passed': False, 'checks': [
+            {'name': 'real browser validation', 'passed': False,
+             'detail': 'Headless Chrome SIGABRT; CUA browser host unavailable.'}]})
+        self.assertTrue(self.run_prepare()['browser_required'])
+
     def test_running_producer_is_blocked(self):
         self.write('execution.json', {'status': 'running'})
         with self.assertRaisesRegex(ValueError, 'still running'):

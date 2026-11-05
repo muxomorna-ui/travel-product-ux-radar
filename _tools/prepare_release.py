@@ -27,7 +27,7 @@ def prepare(source, output, date):
     validation = read('validation.json')
     failed = [x for x in validation.get('checks', []) if x.get('passed') is not True]
     # A launcher crash requires an independent browser check, not a fake pass.
-    launch_failure = (len(failed) == 1 and failed[0].get('name') == 'validate-browser.cjs'
+    launch_failure = (len(failed) == 1 and failed[0].get('name') in ('validate-browser.cjs', 'real browser validation')
                       and any(x in failed[0].get('detail', '') for x in
                               ('SIGABRT', 'Executable doesn\'t exist', 'browserType.launch')))
     if not validation.get('passed') and not launch_failure:
