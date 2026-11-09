@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare a release; browser verification is mandatory before installation/push.
+"""Prepare a release; browser verification or authorized static fallback is required before installation/push.
 
 Never executes scripts supplied by a run. Uses only Python stdlib and node --check.
 """
@@ -64,7 +64,7 @@ def prepare(source, output, date):
             (output / name).write_bytes((source / name).read_bytes())
             names.append(name)
     hashes = {name: hashlib.sha256((output / name).read_bytes()).hexdigest() for name in names}
-    result = {'run': source.name, 'date': date, 'browser_required': True,
+    result = {'run': source.name, 'date': date, 'browser_required': False, 'verification_required': 'browser_or_static_fallback',
               'producer_browser_launch_failed': launch_failure, 'files': hashes}
     (output / 'release-check.json').write_text(json.dumps(result, ensure_ascii=False, indent=2))
     print(json.dumps(result, ensure_ascii=False))
